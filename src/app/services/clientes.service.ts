@@ -14,4 +14,12 @@ export class ClientesService {
   listarTodosClientes() {
     return this.http.get<ICliente[]>(`${this.api}/${this.endpoint}/`);
   }
+
+  cadastrar(cliente: ICliente) {
+    return this.http.post(`${this.api}/${this.endpoint}/`, cliente);
+  }
+
+  remover(id: number) {
+    return this.http.delete(`${this.api}/${this.endpoint}/${id}`);
+  }
 }

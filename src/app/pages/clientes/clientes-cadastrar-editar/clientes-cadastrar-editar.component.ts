@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ICliente } from 'src/app/interfaces/cliente';
+import { ClientesService } from 'src/app/services/clientes.service';
 
 @Component({
   selector: 'app-clientes-cadastrar-editar',
@@ -7,9 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClientesCadastrarEditarComponent implements OnInit {
 
-  constructor() { }
+  formCliente: FormGroup = new FormGroup({
+    id: new FormControl(null),
+    nome: new FormControl('', Validators.required),
+    cpf: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    observacoes: new FormControl(''),
+    ativo: new FormControl(true)
+  });
+
+  constructor(private clientesService: ClientesService) { }
 
   ngOnInit(): void {
+  }
+
+  enviar() {
+    const cliente: ICliente = this.formCliente.value;
+    this.clientesService.cadastrar(cliente).subscribe(result => {
+      console.log(result);
+    });
   }
 
 }
