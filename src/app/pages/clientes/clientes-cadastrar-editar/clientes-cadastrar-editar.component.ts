@@ -8,35 +8,57 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-clientes-cadastrar-editar',
   templateUrl: './clientes-cadastrar-editar.component.html',
-  styleUrls: ['./clientes-cadastrar-editar.component.css']
+  styleUrls: ['./clientes-cadastrar-editar.component.css'],
 })
 export class ClientesCadastrarEditarComponent implements OnInit {
 
-  formCliente: FormGroup = new FormGroup({
-    id: new FormControl(null),
-    nome: new FormControl('', Validators.required),
-    cpf: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    observacoes: new FormControl(''),
-    ativo: new FormControl(true)
-  });
+  emptyCliente: ICliente = {
+    id: 0,
+    nome: '',
+    cpf: '',
+    email: '',
+    observacoes: '',
+    ativo: true
+  }
+
+  formCliente: FormGroup = this.preencheFormGroup(this.emptyCliente);
 
   constructor(
     private clientesService: ClientesService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    console.log(id);
+    const id = Number(this.activatedRoute.snapshot.paramMap.get('id'));
+    if (id) {
+      this.clientesService.buscarPorId(id).subscribe((result: ICliente) => {
+        this.formCliente = this.preencheFormGroup(result);
+      }, error => {
+        console.error(error);
+      });
+    }
+  }
+
+  preencheFormGroup(cliente: ICliente): FormGroup {
+    return new FormGroup({
+      id: new FormControl(cliente.id),
+      nome: new FormControl(cliente.nome, Validators.required),
+      cpf: new FormControl(cliente.cpf, Validators.required),
+      email: new FormControl(cliente.email, [
+        Validators.required,
+        Validators.email,
+      ]),
+      observacoes: new FormControl(cliente.observacoes),
+      ativo: new FormControl(cliente.ativo),
+    });
   }
 
   enviar() {
     const cliente: ICliente = this.formCliente.value;
-    this.clientesService.cadastrar(cliente).subscribe(result => {
+    this.clientesService.cadastrar(cliente).subscribe((result) => {
       Swal.fire('Sucesso', 'Cadastrado com sucesso!', 'success');
       this.router.navigate(['/clientes']);
     });
   }
-
 }
