@@ -22,4 +22,7 @@ export class ClientesService {
   remover(id: number) {
     return this.http.delete(`${this.api}/${this.endpoint}/${id}`);
   }
+  buscarPorId(id: number) {
+
+  }
 }
