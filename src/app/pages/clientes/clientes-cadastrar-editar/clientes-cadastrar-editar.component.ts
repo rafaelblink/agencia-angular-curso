@@ -32,6 +32,7 @@ export class ClientesCadastrarEditarComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.activatedRoute.snapshot.paramMap.get('id'));
     if (id) {
+      this.formCliente.get('cpf')?.disable();
       this.clientesService.buscarPorId(id).subscribe((result: ICliente) => {
         this.formCliente = this.preencheFormGroup(result);
       }, error => {

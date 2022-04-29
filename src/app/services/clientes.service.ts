@@ -29,4 +29,8 @@ export class ClientesService {
   buscarPorId(id: number): Observable<ICliente> {
     return this.http.get<ICliente>(`${this.api}/${this.endpoint}/${id}`);
   }
+  buscarPorCPF(cpf: string) {
+    return this.http.get<ICliente>(`${this.api}/${this.endpoint}/buscarPorCpf/${cpf}`);
+  }
+
 }
