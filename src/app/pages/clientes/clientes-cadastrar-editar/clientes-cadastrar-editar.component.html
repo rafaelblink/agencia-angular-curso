@@ -1,24 +1,60 @@
-<p>Cadastrar clientes</p>
-
-{{ formCliente.value | json }}
-<div>formCliente.valid  {{ formCliente.valid }}</div>
+<p>{{ estaEditando() ? "Edição" : "Cadastro" }} clientes</p>
 
 <form [formGroup]="formCliente" (ngSubmit)="enviar()">
   <div class="mb-3">
     <label for="nome" class="form-label">Nome</label>
-    <input type="text" class="form-control" id="nome" formControlName="nome">
+    <input type="text" class="form-control" id="nome" formControlName="nome" />
+    <div
+      *ngIf="
+        formCliente.get('nome')?.errors &&
+        formCliente.get('nome')?.hasError('required')
+      "
+      class="form-text text-danger"
+    >
+      Campo obrigatório
+    </div>
   </div>
   <div class="mb-3">
     <label for="email" class="form-label">E-mail</label>
-    <input type="text" class="form-control" id="email" formControlName="email">
+    <input
+      type="text"
+      class="form-control"
+      id="email"
+      formControlName="email"
+    />
+    <div
+      *ngIf="
+        formCliente.get('email')?.errors &&
+        formCliente.get('email')?.hasError('required')
+      "
+      class="form-text text-danger"
+    >
+      Campo obrigatório
+    </div>
   </div>
   <div class="mb-3">
     <label for="cpf" class="form-label">CPF</label>
-    <input type="text" class="form-control" id="cpf" formControlName="cpf">
+    <input type="text" class="form-control" id="cpf" formControlName="cpf" />
+    <div
+      *ngIf="
+        formCliente.get('cpf')?.errors &&
+        formCliente.get('cpf')?.hasError('required')
+      "
+      class="form-text text-danger"
+    >
+      Campo obrigatório
+    </div>
   </div>
   <div class="mb-3">
     <label for="observacoes" class="form-label">Observações</label>
-    <textarea id="observacoes" rows="3" class="form-control" formControlName="observacoes"></textarea>
+    <textarea
+      id="observacoes"
+      rows="3"
+      class="form-control"
+      formControlName="observacoes"
+    ></textarea>
   </div>
-  <button [disabled]="!formCliente.valid" type="submit" class="btn btn-dark">Enviar</button>
+  <button [disabled]="!formCliente.valid" type="submit" class="btn btn-dark">
+    Enviar
+  </button>
 </form>

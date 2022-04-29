@@ -42,7 +42,7 @@ export class ClientesCadastrarEditarComponent implements OnInit {
 
   preencheFormGroup(cliente: ICliente): FormGroup {
     return new FormGroup({
-      id: new FormControl(cliente.id),
+      id: new FormControl(cliente.id ? cliente.id : null),
       nome: new FormControl(cliente.nome, Validators.required),
       cpf: new FormControl(cliente.cpf, Validators.required),
       email: new FormControl(cliente.email, [
@@ -56,9 +56,16 @@ export class ClientesCadastrarEditarComponent implements OnInit {
 
   enviar() {
     const cliente: ICliente = this.formCliente.value;
-    this.clientesService.cadastrar(cliente).subscribe((result) => {
-      Swal.fire('Sucesso', 'Cadastrado com sucesso!', 'success');
+    this.clientesService.cadastrarEditar(cliente).subscribe((result) => {
+      Swal.fire(
+        'Sucesso',
+        `${this.estaEditando() ? 'Editado' : 'Cadastrado'} com sucesso!`,
+        'success');
       this.router.navigate(['/clientes']);
     });
+  }
+
+  estaEditando() {
+    return !!this.formCliente.get("id")?.value;
   }
 }
